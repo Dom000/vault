@@ -1,0 +1,12 @@
+# Root 
+node_modules/
+dist/
+.env
+
+# Client-specific .gitignore
+vault_frontend/node_modules/
+
+# Server-specific .gitignore
+vault_backend/node_modules/
+
+vault_backend/.env

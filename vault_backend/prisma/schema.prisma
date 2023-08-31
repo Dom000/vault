@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  email      String   @unique
+  full_name  String
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  vault      Folder?
+  otp        Otp?
+
+  @@map("users")
+}
+
+model Folder {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   Users  @relation(fields: [userid], references: [id], onDelete: Cascade)
+  userid String @unique @db.ObjectId
+
+  @@map("folder")
+}
+
+
+model Otp {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  code       String
+  expiration DateTime
+  user       Users    @relation(fields: [otpId], references: [id], onDelete: Cascade)
+  otpId      String   @unique @db.ObjectId
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("otp")
+}
